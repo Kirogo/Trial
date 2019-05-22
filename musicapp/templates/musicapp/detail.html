@@ -1,0 +1,75 @@
+{% extends 'musicapp/base.html'%}
+
+{%  block content%}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="thumbnail">
+                <img src="{{ album.cover.url }}" class="img img-thumbnail img img responsive">
+                <div class="caption">
+                    <h4>{{ album.name }}</h4>
+                    <h5>{{ album.artist}}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-9">
+        <ul class="nav nav-pills">
+            <li role="presentation"class="active"><a href="">Songs</a></li>
+            <li role="presentation"><a href=" {% url 'musicapp:create_song' album.id %}">Add Song</a></li>
+        </ul>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="text-center">Songs</h3>
+            </div>
+
+            <div class="panel-body">
+                {% if message %}
+                <p class="text-success">{{ message }}</p>
+                {% endif %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Audio</th>
+                        <th>Favourite</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+                    {% if album.song_set %}
+                        {% for song in album.song_set.all %}
+                    <tr>
+                        <td>{{ song.song_name }}</td>
+                        <td>
+                            <a target="_blank" href="{{ song.song_file.url }}">
+                                <button type="button" class="btn btn-success btn-xs">
+                                    <span class="glyphicon glyphicon-play"></span>&nbsp;Play
+                                </button>
+                            </a>
+
+                        </td>
+                        <td>
+                            <a href="">
+                                <span class="glyphicon glyphicon-star"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'musicapp:delete_song' album.id song.id %}">
+                                <button type="button" class="btn btn-danger btn-xs">
+                                    <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                        {% endfor %}
+                    {% endif %}
+                </table>
+
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
